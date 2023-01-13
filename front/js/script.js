@@ -1,11 +1,11 @@
-//requête pour récupérer la liste de produits de l'api
+//requêter l'Api pour récupérer la liste des produits
 
 fetch("http://localhost:3000/api/products")
     .then((response) => response.json())
     .then((data) => addProducts(data))
 
 
-//Fonction pour inserer les produits sur la page d'accueil
+//Inserer les produits dans la page d'accueil
 function addProducts(data) { 
 
     for (let i = 0; i < data.length; i++) {
