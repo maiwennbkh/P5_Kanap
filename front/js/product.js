@@ -72,7 +72,7 @@ button.addEventListener("click", (event) => {
 
     if(orderInvalid(color, quantity)) return
 
-    createOrder(color, quantity)
+    createOrder(color, quantity);
 
     window.location.href = "cart.html"
 }) 
@@ -85,6 +85,7 @@ function orderInvalid(color, quantity) {
     }
 }
 
+
 function createOrder(color, quantity) {
     const data = {
         id: id,
@@ -93,3 +94,5 @@ function createOrder(color, quantity) {
     }
     localStorage.setItem(id, JSON.stringify(data))
 }
+    
+    
