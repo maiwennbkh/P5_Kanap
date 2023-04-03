@@ -88,7 +88,11 @@ function orderInvalid(color, quantity) {
 }
 
 function createOrder(color, quantity) {
-    let cart = JSON.parse(localStorage.getItem('cart'));
+    let cart = [];
+    if (localStorage.getItem('cart')) {
+    cart = JSON.parse(localStorage.getItem('cart'));
+    }
+    
     // lire le localStorage pour récupérer le panier en cours
     //Si le panier n'exite pas (il est null) on initialise la variable cart avec un tableau vide
     if (cart == null) {
@@ -128,4 +132,3 @@ function createOrder(color, quantity) {
     } //on stocke tout le panier avec une seule clé 'cart'
     localStorage.setItem('cart', JSON.stringify(cart))
 }
-    
