@@ -1,8 +1,6 @@
 //afficher l'orderId
-// vider le localStorage
 
 displayOrderId();
-clearLocalStorage();
 
 
 function displayOrderId() {
@@ -17,9 +15,3 @@ function displayOrderId() {
 }
 
 
-function clearLocalStorage() {
-
-    const localStorage = window.localStorage;
-    localStorage.clear();
-
-}

@@ -141,7 +141,7 @@ function addQuantityToSettings(settings, item) {
   input.value = item.quantity;
   
   input.addEventListener('change', () => updateItemsInCart(item, input.value));
-  
+
   quantity.appendChild(input);
   settings.appendChild(quantity);
   
@@ -149,9 +149,12 @@ function addQuantityToSettings(settings, item) {
 
 //trouver l'article à mettre a jour dans le panier + mise a jour des totaux + sauvegarde des données dans le localStorage
 function updateItemsInCart(item, itemNewQuantity) {
-//  const itemToUpdate = cart.find(item => item.id === id); 
-//  itemToUpdate.quantity = parseInt(newValue);
-console.log(itemNewQuantity);
+  //  const itemToUpdate = cart.find(item => item.id === id); 
+  //  itemToUpdate.quantity = parseInt(newValue);
+  console.log(itemNewQuantity);
+
+  if(checkQuantity(item,itemNewQuantity)) return
+  
   for(let index in cart) {
     if (cart[index]['id'] == item.id && cart[index]['color'] == item.color) {
       cart[index]['quantity'] = parseInt(itemNewQuantity);
@@ -159,6 +162,13 @@ console.log(itemNewQuantity);
   }
 
   saveToLocalStorage(cart);
+}
+
+function checkQuantity(item,itemNewQuantity) {
+  if (itemNewQuantity > 100) {
+    alert("Ne pas dépasser la quantité maximale de 100 unités")
+    return true
+  }
 }
 
 //supprimer données du localStorage
@@ -275,6 +285,7 @@ orderFormButton.addEventListener("click", function(event) {
     .then((data) => {
       const orderId = data.orderId
       console.log(orderId)
+      clearLocalStorage();
       window.location.href = "/front/html/confirmation.html" + "?orderId=" + orderId
     })
         //rediriger sur la page de confirmation avec l'orderId dans l'URL
@@ -282,6 +293,13 @@ orderFormButton.addEventListener("click", function(event) {
   }
 
 });
+
+function clearLocalStorage() {
+
+  const localStorage = window.localStorage;
+  localStorage.clear();
+
+}
 
 function checkForm() {
   const form = document.querySelector(".cart__order__form");

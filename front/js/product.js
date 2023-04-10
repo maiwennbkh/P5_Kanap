@@ -85,6 +85,11 @@ function orderInvalid(color, quantity) {
         alert("Choisissez une couleur et une quantité")
         return true
     }
+
+    if (color === "" || quantity > 100) {
+        alert("Ne pas dépasser la quantité maximale de 100 unités")
+        return true
+    }
 }
 
 function createOrder(color, quantity) {
