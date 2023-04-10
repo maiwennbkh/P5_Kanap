@@ -76,7 +76,7 @@ button.addEventListener("click", (event) => {
 
     createOrder(color, quantity);
 
-  //  window.location.href = "cart.html"
+    window.location.href = "cart.html"
 }) 
 
 

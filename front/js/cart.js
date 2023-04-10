@@ -239,8 +239,7 @@ function checkCart() {
 orderFormButton.addEventListener("click", function(event) {
   event.preventDefault();
 
-  if(checkForm()) return;
-
+  
   const form = document.querySelector(".cart__order__form");
 
   const firstName = document.getElementById("firstName").value;
@@ -259,8 +258,13 @@ orderFormButton.addEventListener("click", function(event) {
     },
     products : getProductsId()
   };
-  // console.log(formData)
-  if (checkCart() && checkEmail(email)) {
+
+  //si le panier est plein et si le formulaire est bien rempli
+  //alors j'envoie la requête au serveur
+
+  if(checkForm()) return;
+
+  if (checkCart() && checkEmail(email) && checkFirstName(firstName) && checkLastName(lastName) && checkCity(city) && checkAddress(address)) {
     fetch('http://localhost:3000/api/products/order', {
       method: 'POST',
       body: JSON.stringify(formData),
@@ -268,8 +272,13 @@ orderFormButton.addEventListener("click", function(event) {
         "Content-Type": "application/json"}
     })
     .then(response => response.json())
-    .then(data => console.log(data)); 
-    
+    .then((data) => {
+      const orderId = data.orderId
+      console.log(orderId)
+      window.location.href = "/front/html/confirmation.html" + "?orderId=" + orderId
+    })
+        //rediriger sur la page de confirmation avec l'orderId dans l'URL
+
   }
 
 });
@@ -298,6 +307,65 @@ function checkEmail(email) {
   return true;
 }
 
+function checkCity(city) {
+  let regex = /^[A-Za-z\-]+$/;
+
+  if(regex.test(city) === false) {
+    document.querySelector("#cityErrorMsg").textContent = "Renseigner une ville valide"
+    return false;
+  }
+  return true;
+}
+
+function checkAddress(address) {
+  let regex = /^(\d{1,5})?(\s*[\w-àéèêôûùïñ]+)+$/;
+
+  if(regex.test(address) === false) {
+    document.querySelector("#addressErrorMsg").textContent = "Renseigner une adresse valide"
+    return false;
+  }
+  return true;
+}
+
+// const listAddressesToTest = [
+//   '7 rue victor hugo',
+//   'rue victor hugo',
+//   '123456 avenud du foiñ'
+// ]
+// function testCheckAddress(listAddressesToTest) {
+//   for (let address of listAddressesToTest) {
+//     if (checkAddress(address)) {
+//       console.log('test de ladresse' + address + ' ok !')
+//     }
+//     else {
+//       console.log('test de ladresse' + address + ' failed !!!')
+//       exit(1)
+//     }
+//   }
+// }
+
+function checkLastName(lastName) {
+  let regex = /^[a-zA-ZÀ-ÖØ-öø-ÿ-]+$/;
+
+  if(regex.test(lastName) === false) {
+    document.querySelector("#lastNameErrorMsg").textContent = "Renseigner un nom valide"
+    return false;
+  }
+  return true;
+}
+
+function checkFirstName(firstName) {
+  let regex = /^[a-zA-ZÀ-ÖØ-öø-ÿ-]+$/;
+
+  if(regex.test(firstName) === false) {
+    document.querySelector("#firstNameErrorMsg").textContent = "Renseigner un prénom valide"
+    return false;
+  }
+  return true;
+
+}
+
+
 
 function getProductsId() {
 
@@ -310,4 +378,3 @@ function getProductsId() {
   }
   return ids; 
 }
-
