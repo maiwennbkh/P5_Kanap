@@ -19,7 +19,6 @@ function addProductDetails(kanap) {
     const description = kanap.description
     const colors = kanap.colors
     
-
     createImage(imageUrl, altTxt)
     createColors(colors)
     createTitle(name)
@@ -27,6 +26,7 @@ function addProductDetails(kanap) {
     createDescription(description)
 }
 
+//création elements html pour les images
 function createImage(imageUrl, altTxt) {
     const image = document.createElement('img')
     image.src = imageUrl
@@ -35,7 +35,8 @@ function createImage(imageUrl, altTxt) {
     document.querySelector(`.item__img`).appendChild(image)
 
 }
-        
+
+//création elements html pour les couleurs 
 function createColors(colors) {
 
     for (let i = 0; i < colors.length; i++) {
@@ -48,22 +49,25 @@ function createColors(colors) {
 }
 }
 
+//création elements html pour les noms
 function createTitle(name) {
     const h1 = document.querySelector('h1')
     h1.textContent = name
 }
 
+//création elements html pour les prix
 function createPrice(price) {
     const span = document.querySelector('#price')
     span.textContent = price
 }
 
+//création elements html pour la description des produits
 function createDescription(description) {
     const p = document.querySelector('#description')
     p.textContent = description
 }
 
-//écoute du bouton "Ajouter au panier" + récupèration de la couleur et de la quantité 
+//écoute du bouton "Ajouter au panier" + récuperation de la couleur et de la quantité 
 //vérification des choix de couleur et quantité, si ils sont valides créer la  commande et ajouter le produit au localStorage
 //si l'un des choix est invalide, afficher une alerte et empêcher la commande 
 
@@ -73,25 +77,24 @@ button.addEventListener("click", (event) => {
     const quantity = document.querySelector("#quantity").value
 
     if(orderInvalid(color, quantity)) return
-
     createOrder(color, quantity);
 
     window.location.href = "cart.html"
 }) 
 
-
+//verifier la validité des choix de couleur et quantité
 function orderInvalid(color, quantity) {
     if (color === "" || quantity == 0) {
         alert("Choisissez une couleur et une quantité")
         return true
     }
-
     if (color === "" || quantity > 100) {
         alert("Ne pas dépasser la quantité maximale de 100 unités")
         return true
     }
 }
 
+//creer la commande
 function createOrder(color, quantity) {
     let cart = [];
     if (localStorage.getItem('cart')) {
@@ -103,7 +106,8 @@ function createOrder(color, quantity) {
     if (cart == null) {
         cart = [];
     }
-    // on crée une variable drapeau pour surveiller si on aura une mise à jour de quantité (donc si l'article ajouté existe déjà dans sa couleur)
+    // on crée une variable drapeau pour surveiller si on aura une mise à jour de quantite
+    // (donc si l'article ajouté existe déjà dans sa couleur)
     let flag = 0;
         //parcours le panier : pour chaque élément du panier :
         //tester si l'id et la couleur correspondent à l'article qu'on veut ajouter
@@ -120,7 +124,6 @@ function createOrder(color, quantity) {
             else {
                 cart[i]['quantity'] = parseInt(quantity) + parseInt(cart[i]['quantity']);
             }
-            console.log(cart[i]);
             flag = 1;
         }
     }

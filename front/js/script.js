@@ -4,7 +4,6 @@ fetch("http://localhost:3000/api/products")
     .then((response) => response.json())
     .then((data) => addProducts(data))
 
-
 //Inserer les produits dans la page d'accueil
 function addProducts(data) { 
 
@@ -25,10 +24,10 @@ function addProducts(data) {
             
         appendChildToArticle (article, image, h3,p)
         appendArticleToAnchor(anchor, article)
-    }
-   
+    }  
 }
 
+//créer les differents elements html (lien, article,image,titre,description)
 
 function createAnchor(id) {
     const anchor = document.createElement('a')

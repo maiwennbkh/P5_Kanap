@@ -9,20 +9,10 @@ async function getItemFromStorage() {
   document.querySelector('#cart__items').innerHTML = '';
 
   for (let item of cart) {
-  // console.log(item)
   
   const response = await fetch(`http://localhost:3000/api/products/${item.id}`);
   const data = await response.json();
 
-  // const item = JSON.parse(localStorage.getItem(localStorage.key(i)));
-  // const response = await fetch(`http://localhost:3000/api/products/${item.id}`);
-
-  // const data = await response.json();
-  // data.quantity = item.quantity;
-  // data.color = item.color;
-  // data.id = data._id;
-  // delete data._id;
-  // delete data.colors;
   item['imageUrl'] = data.imageUrl;
   item['price'] = data.price;
   item['name'] = data.name;
@@ -30,10 +20,9 @@ async function getItemFromStorage() {
   
   totalQuantity = totalQuantity + item.quantity;
   totalPrice = totalPrice + (item.quantity * item.price);
-}
-displayTotalQuantity(totalQuantity);
-displayTotalPrice(totalPrice);
-
+ }
+  displayTotalQuantity(totalQuantity);
+  displayTotalPrice(totalPrice);
 }
 getItemFromStorage();
 
@@ -59,9 +48,6 @@ function displayTotalQuantity(item) {
 function displayTotalPrice(item) {
   
   const totalPrice = document.querySelector("#totalPrice");
-  // console.log(item)
-
-  
   totalPrice.textContent = item;
 }
 
@@ -76,7 +62,6 @@ function createCartContent (item) {
   cartItemContent.appendChild(description);
   cartItemContent.appendChild(settings);
   return cartItemContent;
-
 }
 
 //creation d'un element pour contenir les differents boutons (ajuster la quantité et supprimer)
@@ -87,7 +72,6 @@ function createSettings(item) {
   addQuantityToSettings(settings, item);
   addDeleteToSettings(settings, item);
   return settings;
-  
 }
 
 //creation du bouton supprimer permettant de supprimer l'article au clic
@@ -143,27 +127,21 @@ function addQuantityToSettings(settings, item) {
   input.addEventListener('change', () => updateItemsInCart(item, input.value));
 
   quantity.appendChild(input);
-  settings.appendChild(quantity);
-  
+  settings.appendChild(quantity); 
 }
 
 //trouver l'article à mettre a jour dans le panier + mise a jour des totaux + sauvegarde des données dans le localStorage
 function updateItemsInCart(item, itemNewQuantity) {
-  //  const itemToUpdate = cart.find(item => item.id === id); 
-  //  itemToUpdate.quantity = parseInt(newValue);
-  console.log(itemNewQuantity);
-
   if(checkQuantity(item,itemNewQuantity)) return
-  
   for(let index in cart) {
     if (cart[index]['id'] == item.id && cart[index]['color'] == item.color) {
       cart[index]['quantity'] = parseInt(itemNewQuantity);
     }
   }
-
   saveToLocalStorage(cart);
 }
 
+//verifie que la quantite d'un produit sur la page panier ne depasse pas 100 
 function checkQuantity(item,itemNewQuantity) {
   if (itemNewQuantity > 100) {
     alert("Ne pas dépasser la quantité maximale de 100 unités")
@@ -208,6 +186,7 @@ function createDescription(item) {
   return description;
 }
 
+//creation element html
 function displayArticle(article) {
   document.querySelector('#cart__items').appendChild(article);
 }
@@ -222,7 +201,6 @@ function createImage(item) {
   image.setAttribute("alt", item.altTxt);
   div.appendChild(image);
   return div;
-
 }
 
 //creation element html article
@@ -234,22 +212,20 @@ function createArticle(item) {
   return article;
 }
 
-
-const orderFormButton = document.querySelector("#order");
-
+//verifie si le panier est vide ou non
 function checkCart() {
   if (cart.length === 0) { 
     alert("Le panier est vide, ajouter des produits au panier")
     return false;
-   }
-   return true;
+  }
+  return true;
 }
 
-
+//ajout d'un listener sur le bouton 'Commander'
+const orderFormButton = document.querySelector("#order");
 orderFormButton.addEventListener("click", function(event) {
   event.preventDefault();
 
-  
   const form = document.querySelector(".cart__order__form");
 
   const firstName = document.getElementById("firstName").value;
@@ -284,16 +260,13 @@ orderFormButton.addEventListener("click", function(event) {
     .then(response => response.json())
     .then((data) => {
       const orderId = data.orderId
-      console.log(orderId)
       clearLocalStorage();
       window.location.href = "/front/html/confirmation.html" + "?orderId=" + orderId
     })
-        //rediriger sur la page de confirmation avec l'orderId dans l'URL
-
   }
-
 });
 
+//vider localStorage
 function clearLocalStorage() {
 
   const localStorage = window.localStorage;
@@ -301,6 +274,7 @@ function clearLocalStorage() {
 
 }
 
+//verifier le remplissage de tous les champs du formulaire
 function checkForm() {
   const form = document.querySelector(".cart__order__form");
   const inputs = form.querySelectorAll("input");
@@ -311,10 +285,10 @@ function checkForm() {
       return true
     }
     return false
-  });
-  
+  });  
 }
 
+//verifier l'email
 function checkEmail(email) { 
   let regex = /^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,5}$/;
 
@@ -325,6 +299,7 @@ function checkEmail(email) {
   return true;
 }
 
+//verifier la ville
 function checkCity(city) {
   let regex = /^[A-Za-z\-]+$/;
 
@@ -335,6 +310,7 @@ function checkCity(city) {
   return true;
 }
 
+//verifier l'adresse
 function checkAddress(address) {
   let regex = /^(\d{1,5})?(\s*[\w-àéèêôûùïñ]+)+$/;
 
@@ -345,23 +321,7 @@ function checkAddress(address) {
   return true;
 }
 
-// const listAddressesToTest = [
-//   '7 rue victor hugo',
-//   'rue victor hugo',
-//   '123456 avenud du foiñ'
-// ]
-// function testCheckAddress(listAddressesToTest) {
-//   for (let address of listAddressesToTest) {
-//     if (checkAddress(address)) {
-//       console.log('test de ladresse' + address + ' ok !')
-//     }
-//     else {
-//       console.log('test de ladresse' + address + ' failed !!!')
-//       exit(1)
-//     }
-//   }
-// }
-
+//verifier le Nom
 function checkLastName(lastName) {
   let regex = /^[a-zA-ZÀ-ÖØ-öø-ÿ-]+$/;
 
@@ -372,6 +332,7 @@ function checkLastName(lastName) {
   return true;
 }
 
+//verifier le prenom
 function checkFirstName(firstName) {
   let regex = /^[a-zA-ZÀ-ÖØ-öø-ÿ-]+$/;
 
@@ -380,11 +341,9 @@ function checkFirstName(firstName) {
     return false;
   }
   return true;
-
 }
 
-
-
+//Obtenir un tableau d'IDs de tous les produits presents dans le panier
 function getProductsId() {
 
   let productsInCart = cart.length;
