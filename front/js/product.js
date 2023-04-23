@@ -92,6 +92,11 @@ function orderInvalid(color, quantity) {
         alert("Ne pas dépasser la quantité maximale de 100 unités")
         return true
     }
+    if (color === "" || quantity < 1) {
+        alert("Saisir une quantité comprise entre 1 et 100 unités")
+        return true
+    }
+
 }
 
 //creer la commande

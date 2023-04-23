@@ -147,6 +147,10 @@ function checkQuantity(item,itemNewQuantity) {
     alert("Ne pas dépasser la quantité maximale de 100 unités")
     return true
   }
+  if (itemNewQuantity <= 0) {
+    alert("Saisir une quantité comprise entre 1 et 100")
+    return true
+  }
 }
 
 //supprimer données du localStorage
